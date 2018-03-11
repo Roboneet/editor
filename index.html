@@ -3,18 +3,23 @@
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Web demo</title>
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="css/style.css">
 	</head>
 	<body>
 		<div class="heading">Editor demo</div>
 		<div class="content">
 			<div class="render_editor">
 				<h1>Editor</h1>
-				<div class="main">					
-					<canvas width=280 height="280" id="editor"></canvas>
-					<div class="options">
-						<button id="clearEditor">Clear</button>
-						<!-- <button id="getImage">get Image</button>			 -->
+				<div>
+					<div>				
+						<canvas width=280 height="280" id="editor"></canvas>
+						<div class="options">
+							<button id="clearEditor">Clear</button>
+							<!-- <button id="getImage">get Image</button>			 -->
+						</div>
+					</div>
+					<div>
+						<canvas width=200 height=200 id="result"></canvas>
 					</div>
 				</div>
 			</div>
@@ -25,7 +30,9 @@
 		</div>
 	</body>
 	<script src="exampleArray.js"></script>
-	<script src="script.js"></script>
+	<script src="js/Editor.js"></script>
+	<script src="js/Result.js"></script>
+	<script src="js/script.js"></script>
 	<script>
 
 	</script>

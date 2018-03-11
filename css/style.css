@@ -54,6 +54,7 @@ body{
 
 .render_image{
 	/*background: #eee;*/
+	width: 20vw;
 	border-left: 1px solid #d8d7d7;
 }
 

@@ -9,6 +9,7 @@
 
 		var scope = this;
 		this.editor.setDrawEndCallback(callback.bind(scope))
+		
 		function callback(image){
 			this.findResult(image)
 		}
@@ -22,15 +23,16 @@
 		
 		var tensor = dl.tensor(input);	
 		var output = this.model(tensor);
-		console.log(output)
+
 		output.data().then(function(val){
 			(scope.showResult.bind(scope))(val);
 		})
 	}
 
+	// 28*28*4 rgba Unit8 array into 28*28 grayscale Float32Array 
 	Model.prototype.blackAndWhite = function(imageData){
-		return (new Array(784)).fill(0).map((e, i)=>{
-			return (255 - imageData[i*4]);
+		return (new Float32Array(784)).fill(0.0).map((e, i)=>{
+			return (255.0 - imageData[i*4]);
 		});
 	}
 

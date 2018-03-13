@@ -1,5 +1,12 @@
+// flux.fetchWeights('mnist-mlp.bson').then(ws=>{
+// 	console.log("loaded")
+// 	model.weights = ws;
+// 	__init__();
+// })
+
 let Buffer = new BSON().serialize({}).constructor
 
+// send an xhr Request so as to show event progress
 var weightsRequest = new XMLHttpRequest();
 weightsRequest.open('GET', './mnist-mlp.bson');
 weightsRequest.responseType = "arraybuffer";
@@ -20,7 +27,7 @@ var pbar = new ProgressBar({
 })
 
 window.onload = ()=>{
-	console.log(weightsRequest)
 	weightsRequest.send();
 	pbar.start();
 }
+

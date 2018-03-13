@@ -16,7 +16,7 @@ function __init__(){
 		
 // draw number
 var numberCanvas = document.querySelector("#number");
-drawImage(numberCanvas, exampleArray)
+// drawImage(numberCanvas, exampleArray)
 
 function drawImage(numberCanvas, data){
 	var ctx = numberCanvas.getContext('2d');

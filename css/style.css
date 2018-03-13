@@ -50,6 +50,7 @@ body{
 	height: 89vh;
 	padding: 50px;
 	box-sizing: border-box;
+	position:relative;
 }
 
 .render_image{

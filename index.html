@@ -4,12 +4,16 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Web demo</title>
 		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/progressBar.css">
+		<script src="https://unpkg.com/deeplearn"></script>
+	  	<script src="https://unpkg.com/bson/browser_build/bson.js"></script>
+	  	<script src="js/flux.js"></script>
 	</head>
 	<body>
 		<div class="heading">Editor demo</div>
 		<div class="content">
 			<div class="render_editor">
-				<h1>Editor</h1>
+				<!-- <h1>Editor</h1> -->
 				<div>
 					<div>				
 						<canvas width=280 height="280" id="editor"></canvas>
@@ -24,16 +28,16 @@
 				</div>
 			</div>
 			<div class="render_image">
-				<h1>Display image from Float array</h1>
+				<h1>Input</h1>
 				<canvas width=28 height=28 id="number"></canvas>
 			</div>
 		</div>
 	</body>
+	<script src="js/mnist-mlp.js"></script>
 	<script src="exampleArray.js"></script>
 	<script src="js/Editor.js"></script>
 	<script src="js/Result.js"></script>
+	<script src="js/Model.js"></script>
 	<script src="js/script.js"></script>
-	<script>
-
-	</script>
+	<script src="js/loadWeights.js"></script>
 </html>

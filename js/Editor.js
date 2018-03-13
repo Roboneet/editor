@@ -3,7 +3,7 @@
 Object.assign(window, {Editor})
 
 // editor 
-function Editor(ele, {strokeWidth=3, color="#777", scale=1, background="#fff"}={}){
+function Editor(ele, {strokeWidth=15, color="#000", scale=1, background="#fff"}={}){
 	this.canvas = ele;
 	this.ctx = ele.getContext('2d');
 	this.strokeWidth = strokeWidth;
@@ -13,27 +13,37 @@ function Editor(ele, {strokeWidth=3, color="#777", scale=1, background="#fff"}={
 	this.ctx.scale(scale, scale);
 	this.ctx.fillStyle = background;
 	this.ctx.fillRect(0,0, this.canvas.width, this.canvas.height);
+	this.callback = null;
 }
+
+Editor.prototype = Object.create(EventTarget.prototype)
 
 Editor.prototype.draw = function({clientX, clientY}={}){
 	// event end might trigger
 	if(clientX == 0 && clientY == 0)return;
-	this.ctx.fillStyle = this.color;
+	
 	var editorOffsets = this.canvas.getClientRects()[0];
 	var dx = clientX - editorOffsets.left - 16;
 	var dy = clientY - editorOffsets.top - 16;
 	if(this.prevPoint){
 		this.ctx.beginPath();
+		this.ctx.strokeStyle = this.color;
 		this.ctx.moveTo(this.prevPoint.dx, this.prevPoint.dy);
-		this.ctx.quadraticCurveTo(this.prevPoint.dx, this.prevPoint.dy, dx, dy);
 		this.ctx.lineWidth = this.strokeWidth;
+		var xc = (this.prevPoint.dx + dx) / 2;
+      	var yc = (this.prevPoint.dy + dy) / 2;
+		this.ctx.quadraticCurveTo(xc, yc, dx, dy);
 		this.ctx.stroke();
+
+		this.ctx.beginPath();
+		this.ctx.fillStyle = this.color;
+		this.ctx.arc(dx, dy, this.strokeWidth*.5, 0, Math.PI * 2, true);
+		this.ctx.fill();
 	}
-	// this.ctx.fillRect(dx, dy, this.strokeWidth, this.strokeWidth);
 	this.prevPoint = {dx, dy};
 }
 
-Editor.prototype.handleEvent = function(event){
+Editor.prototype.handleDrawEvent = function(event){
 	var scope = this;
 	if(event instanceof MouseEvent){
 		this.draw(event);
@@ -44,31 +54,47 @@ Editor.prototype.handleEvent = function(event){
 
 Editor.prototype.setUp = function(){
 	var scope = this;
-	scope.handleEvent = scope.handleEvent.bind(scope);
+	scope.handleDrawEvent = scope.handleDrawEvent.bind(scope);
 	if(window.innerWidth > 768){
 		scope.canvas.addEventListener('mousedown', function(event){
-			scope.canvas.addEventListener('mousemove',scope.handleEvent, true)
+			scope.canvas.addEventListener('mousemove',scope.handleDrawEvent, true)
 		})
 
 		scope.canvas.addEventListener('mouseup', function(event){	
-			scope.canvas.removeEventListener('mousemove',scope.handleEvent, true)
+			scope.canvas.removeEventListener('mousemove',scope.handleDrawEvent, true)
 			scope.prevPoint = null;
+			scope.drawEnd();
 		})
 	}else{
 		scope.canvas.addEventListener('touchstart', function(event){
-			scope.canvas.addEventListener('touchmove',scope.handleEvent, true)
+			scope.canvas.addEventListener('touchmove',scope.handleDrawEvent, true)
 		})
 
 		scope.canvas.addEventListener('touchend', function(event){	
-			scope.canvas.removeEventListener('touchmove',scope.handleEvent, true)
+			scope.canvas.removeEventListener('touchmove',scope.handleDrawEvent, true)
 			scope.prevPoint = null;
+			scope.drawEnd();
 		})
+	}
+}
+
+Editor.prototype.setDrawEndCallback = function(callback){
+	this.callback = callback;
+}
+
+Editor.prototype.drawEnd = function(){
+	if(this.callback != null){
+		var image = this.getImage();
+		this.callback(image)
 	}
 }
 
 Editor.prototype.clear = function(){
 	var scope = this;
-	scope.ctx.clearRect(0, 0, scope.canvas.width, scope.canvas.height);
+	scope.ctx.beginPath();
+	scope.ctx.fillStyle = "#fff";
+	scope.ctx.rect(0, 0, scope.canvas.width, scope.canvas.height);
+	scope.ctx.fill();
 	scope.prevPoint =  null;
 }
 
@@ -77,13 +103,12 @@ Editor.prototype.getImage = function() {
 	
 	// create a hidden canvas, render the image as 28*28 and then extract data
 	var hiddenCanvas  = document.createElement('canvas');
-	hiddenCanvas.width = imgData.width;
-	hiddenCanvas.height = imgData.height;
+	hiddenCanvas.width = 28;
+	hiddenCanvas.height = 28;
 	var hctx = hiddenCanvas.getContext('2d');
-	var scaleX = imgData.width/28; 
-	var scaleY = imgData.height/28;
-	hctx.scale(scaleX, scaleY);
-	hctx.putImageData(imgData,0, 0);
+	
+	hctx.drawImage(this.canvas,0, 0, this.canvas.width, this.canvas.height,0, 0, 28, 28);
+	// document.body.appendChild(hiddenCanvas)
 	return hctx.getImageData(0, 0, 28, 28)
 };
 

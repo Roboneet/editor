@@ -52,9 +52,10 @@ Result.prototype.setUp = function(){
 
 Result.prototype.update = function(values){
 	this.setUp();
+
 	var scope = this;
-	console.log(values)
 	var max_i = 0;
+	
 	values.forEach((val, i)=>{
 		fill(val, i, scope.color);
 		if(val> values[max_i]){
@@ -69,11 +70,8 @@ Result.prototype.update = function(values){
 	this.ctx.fillStyle = this.highlight;
 	this.ctx.font = this.fontSize + "px " + this.fontFamily;
 	this.ctx.fillText(this.labels[max_i], labelLeftOffset, labelTopOffset);
-		
-	
 
-	function fill(val, i, color){
-		
+	function fill(val, i, color){	
 		var height = scope.maxHeight * (val/scope.max);
 		var leftOffset = i*(scope.horizontalSpacing + scope.barWidth);
 		var topOffset = (scope.maxHeight - height);

@@ -1,36 +1,36 @@
-// set up editor
-var editor = new Editor(document.querySelector("#editor"));
-editor.setUp();
+var editor, result;
+function __init__(){
+	// set up editor
+	editor = new Editor(document.querySelector("#editor"));
+	editor.setUp();
 
-var result = new Result(document.querySelector("#result"));
-result.setUp();
-result.update((new Array(10)).fill(0).map(e=> Math.random()))
+	result = new Result(document.querySelector("#result"));
+	result.setUp();
 
+	document.querySelector("#clearEditor").addEventListener('click', function(){
+		editor.clear();
+	});
 
-document.querySelector("#clearEditor").addEventListener('click', function(){
-	editor.clear();
-});
-
-// document.querySelector("#getImage").addEventListener('click', function(){
-// 	var imgData = editor.getImage();
-// 	console.log(imgData);
-// });
-
+	model = new Model(editor, result, model);
+}
 		
 // draw number
 var numberCanvas = document.querySelector("#number");
-var ctx = numberCanvas.getContext('2d');
+drawImage(numberCanvas, exampleArray)
 
-var rgbaArray = floatToUint8Clamped(exampleArray);
-var imgData = ctx.createImageData(28,28);
-imgData.data.map((e, i)=>{
-	imgData.data[i] = rgbaArray[i];
-})
+function drawImage(numberCanvas, data){
+	var ctx = numberCanvas.getContext('2d');
+	ctx.clearRect(0, 0, 28, 28);
+	var rgbaArray = floatToUint8Clamped(data);
+	var imgData = ctx.createImageData(28,28);
+	imgData.data.map((e, i)=>{
+		imgData.data[i] = rgbaArray[i];
+	})
 
-ctx.putImageData(imgData, 0, 0);
+	ctx.putImageData(imgData, 0, 0);
+}
 
-
-//convert float array into rgba Unit9ClampedArray
+//convert float array into rgba Unit8ClampedArray
 function floatToUint8Clamped(floatArray){
 	var uint8Array = new Uint8ClampedArray(floatArray);
 	var rgbaArray = new Uint8ClampedArray(uint8Array.length * 4);

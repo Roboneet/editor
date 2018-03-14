@@ -19,9 +19,10 @@ var numberCanvas = document.querySelector("#number");
 // drawImage(numberCanvas, exampleArray)
 
 function drawImage(numberCanvas, data){
+
 	var ctx = numberCanvas.getContext('2d');
 	ctx.clearRect(0, 0, 28, 28);
-	var rgbaArray = floatToUint8Clamped(data);
+	var rgbaArray = floatToUint8Clamped(data.map(i=> i*255));
 	var imgData = ctx.createImageData(28,28);
 	imgData.data.map((e, i)=>{
 		imgData.data[i] = rgbaArray[i];

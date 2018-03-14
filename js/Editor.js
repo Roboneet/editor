@@ -3,7 +3,7 @@
 Object.assign(window, {Editor})
 
 // editor 
-function Editor(ele, {strokeWidth=15, color="#000", scale=1, background="#fff"}={}){
+function Editor(ele, {strokeWidth=30, color="#000", scale=1, background="#fff"}={}){
 	this.canvas = ele;
 	this.ctx = ele.getContext('2d');
 	this.strokeWidth = strokeWidth;
